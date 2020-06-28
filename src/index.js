@@ -1,16 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import AttendanceApp from './reducer.js';
 import './index.css';
-import App from './App';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ModalDialog from './components/Home';
+const store = createStore(AttendanceApp);
 
 
 ReactDOM.render(
-  <React.StrictMode>
-    <ModalDialog />
-  </React.StrictMode>,
+  <Provider store={store}>
+    <Router>
+      <ModalDialog />
+    </Router>
+  </Provider>
+  ,
   document.getElementById('root')
 );
 
