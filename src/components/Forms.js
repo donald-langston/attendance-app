@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -11,6 +12,7 @@ function DisplayForm() {
     let lastNameTarget;
 
     const dispatch = useDispatch();
+    let history = useHistory();
 
     const getFirstname = (event) => {
         firstName = event.target.value;
@@ -29,6 +31,8 @@ function DisplayForm() {
         dispatch({ type: "ADD_STUDENT", payload: { firstName, lastName } });
         firstNameTarget.value = "";
         lastNameTarget.value = "";
+        dispatch({type: "HIDE_MODAL"});
+        history.push("/students");
         return;
     };
 

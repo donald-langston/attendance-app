@@ -1,10 +1,13 @@
+import generatId from './generateId';
 const initialState = {
     students: [],
     student: {
         firstName: "",
-        lastName: ""
+        lastName: "",
+        id: null
     },
     show: false
+    
 }
 
 function AttendanceApp(state = initialState, action) {
@@ -15,7 +18,8 @@ function AttendanceApp(state = initialState, action) {
                 ...state,
                 student: {
                     firstName: action.payload.firstName,
-                    lastName: action.payload.lastName
+                    lastName: action.payload.lastName,
+                    id: generatId(action.payload.firstName[0], action.payload.lastName[0])
                 }
             }
             newState.students.push(newState.student);

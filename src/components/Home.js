@@ -8,7 +8,10 @@ import ReactDOM from 'react-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import InputGroup from 'react-bootstrap/InputGroup';
 import DisplayForm from './Forms';
+import DisplayStudents from './Students';
+
 
 function ModalDialog() {
   const dispatch = useDispatch();
@@ -18,10 +21,9 @@ function ModalDialog() {
   const show = useSelector(state => state.show);
   const firstName = useSelector(state => state.student.firstName);
   const lastName = useSelector(state => state.student.lastName);
-  const students = useSelector(state => state.students);
+  
   console.log(firstName);
   console.log(lastName);
-  console.log(students);
 
   return (
     <>
@@ -31,13 +33,18 @@ function ModalDialog() {
           Add Students
         </Button>
       </Route>
-    </Switch> 
+      <Route path="/students">
+          <DisplayStudents />
+      </Route>
+    </Switch>
+
+    
 
       <Modal centered show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Enter Student's Name</Modal.Title>
         </Modal.Header>
-        <Modal.Body><DisplayForm /></Modal.Body>
+          <Modal.Body><DisplayForm /></Modal.Body>
       </Modal>
     </>
   );
