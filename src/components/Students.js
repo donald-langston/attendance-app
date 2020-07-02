@@ -1,12 +1,41 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import Table from 'react-bootstrap/Table';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+
 
 function DisplayStudents() {
 const students = useSelector(state => state.students);
+const states = useSelector(state => state);
+console.log(students);
+console.log(states);
+const dispatch = useDispatch();
+let checkboxArr;
+const checkHandler = (name, id) => {
+    //checkboxes have same name which are stored in checkboxArr
+    checkboxArr = document.getElementsByName(name);
+    //if firstbox is checked disable second
+    if(checkboxArr[0].checked) {
+        checkboxArr[1].disabled = true;
+        dispatch({type: "UPDATE_ATTENDANCE", payload: {attendance: "present", id}});
+        console.log(students);
+    }
+    //if secondbox is checked disable first
+    else if(checkboxArr[1].checked) {
+        checkboxArr[0].disabled = true;
+        dispatch({type: "UPDATE_ATTENDANCE", payload: {attendance: "absent", id}});
+        
+    }
+    //if either checkbox is unchecked reset both
+    else {
+        checkboxArr[0].disabled = false;
+        checkboxArr[1].disabled = false;
+        dispatch({type: "UPDATE_ATTENDANCE", payload: {id}});
+    }
+}
+
+
+
 let studentsHeader = <tr>
                         <th>#</th>
                         <th>ID</th>
@@ -23,14 +52,15 @@ let studentsList = students.map((student, index) => {
             <td>{student.id}</td>
             <td>{student.firstName}</td>
             <td>{student.lastName}</td>
-            <td><input type="checkbox"></input></td>
-            <td><input type="checkbox"></input></td>
+            <td><input type="checkbox" name={"chkbox" + student.id} onClick={() => checkHandler("chkbox" + student.id, student.id)}></input></td>
+            <td><input type="checkbox" name={"chkbox" + student.id} onClick={() => checkHandler("chkbox" + student.id, student.id)}></input></td>
         </tr>
         )
     });
     return (
         <div>
-            <Table striped border hover>
+            <Link to="/">Home</Link>
+            <Table striped bordered hover>
                 <thead>
                     {studentsHeader}
                 </thead>

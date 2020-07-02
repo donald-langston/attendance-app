@@ -1,41 +1,62 @@
-import generatId from './generateId';
+import generateId from './generateId';
 const initialState = {
     students: [],
     student: {
         firstName: "",
         lastName: "",
-        id: null
+        id: null,
+        present: null,
+        absent: null
     },
     show: false
     
 }
 
 function AttendanceApp(state = initialState, action) {
-    let newState = {};
     switch(action.type) {
         case "ADD_STUDENT":
-            newState = {
+            const copy = {
                 ...state,
                 student: {
+                    ...state.student,
                     firstName: action.payload.firstName,
                     lastName: action.payload.lastName,
-                    id: generatId(action.payload.firstName[0], action.payload.lastName[0])
-                }
+                    id: generateId(action.payload.firstName[0], action.payload.lastName[0])
+                },
+                students: [...state.students]
             }
-            newState.students.push(newState.student);
-            return newState;
+            copy.students.push(copy.student);
+            return copy;
         case "SHOW_MODAL":
-             newState = {
+             return {
                 ...state,
                 show: true
             }
-            return newState;
         case "HIDE_MODAL":
-            newState = {
+            return {
                 ...state,
                 show: false
             }
-            return newState;
+        case "UPDATE_ATTENDANCE":
+            let index = state.students.findIndex(student => student.id === action.payload.id);
+            const newState = {
+                ...state,
+                students: [...state.students]
+            }
+                   
+            if(index !== -1 && action.payload.attendance === "present") {
+                newState.students[index].present = true;
+                return newState;
+            }
+            if(index !== -1 && action.payload.attendance === "absent") {
+                newState.students[index].absent = true;
+                return newState;
+            }
+            if(index !== -1) {
+                newState.students[index].present = null;
+                newState.students[index].absent = null;
+                return newState;
+            }
         default:
             return state;
     }
