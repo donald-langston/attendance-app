@@ -8,7 +8,9 @@ const initialState = {
         present: null,
         absent: null
     },
-    show: false
+    show: false,
+    date: null,
+    anotherUser: false
     
 }
 
@@ -26,6 +28,10 @@ function AttendanceApp(state = initialState, action) {
                 students: [...state.students]
             }
             copy.students.push(copy.student);
+            //if anotherUser is set the add button was clicked in modal
+            if(action.payload.anotherUser) {
+                copy.anotherUser = true;
+            }
             return copy;
         case "SHOW_MODAL":
              return {
@@ -35,7 +41,8 @@ function AttendanceApp(state = initialState, action) {
         case "HIDE_MODAL":
             return {
                 ...state,
-                show: false
+                show: false,
+                anotherUser: false
             }
         case "UPDATE_ATTENDANCE":
             let index = state.students.findIndex(student => student.id === action.payload.id);
@@ -44,18 +51,29 @@ function AttendanceApp(state = initialState, action) {
                 students: [...state.students]
             }
                    
-            if(index !== -1 && action.payload.attendance === "present") {
-                newState.students[index].present = true;
-                return newState;
+            if(index !== -1) { 
+                if(action.payload.attendance === "present") {
+                    newState.students[index].present = true;
+                    return newState;
+                } else if(action.payload.attendance === "absent") {
+                    newState.students[index].absent = true;
+                    return newState;
+                } else {
+                    newState.students[index].present = null;
+                    newState.students[index].absent = null;
+                    return newState;
+                }
             }
-            if(index !== -1 && action.payload.attendance === "absent") {
-                newState.students[index].absent = true;
-                return newState;
+            break;
+        case "CHANGE_DATE":
+            return {
+                ...state,
+                date: action.payload
             }
-            if(index !== -1) {
-                newState.students[index].present = null;
-                newState.students[index].absent = null;
-                return newState;
+        case "ADD_DOC_REF":
+            return {
+                ...state,
+                docRef: action.payload
             }
         default:
             return state;

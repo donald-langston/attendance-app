@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import Datepicker from './Datepicker';
 import Table from 'react-bootstrap/Table';
 
 
@@ -43,7 +44,7 @@ let studentsHeader = <tr>
                         <th>Last Name</th>
                         <th>Present</th>
                         <th>Absent</th>
-                    </tr>
+                      </tr>
                     
 let studentsList = students.map((student, index) => {
     return ( 
@@ -60,6 +61,9 @@ let studentsList = students.map((student, index) => {
     return (
         <div>
             <Link to="/">Home</Link>
+            <div>
+                <Datepicker />
+            </div>
             <Table striped bordered hover>
                 <thead>
                     {studentsHeader}

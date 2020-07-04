@@ -1,17 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import firebase from "../firebaseConfig";
 
-function DisplayForm() {
+
+let db = firebase.firestore();
+
+function DisplayForm(props) {
     let firstName = "";
     let lastName = "";
     let firstNameTarget;
     let lastNameTarget;
 
     const dispatch = useDispatch();
+    const anotherUser= useSelector(state => state.anotherUser);
     let history = useHistory();
 
     const getFirstname = (event) => {
@@ -26,27 +31,42 @@ function DisplayForm() {
         return lastName;
     }
 
-    const submitForm = (event) => {
-        event.preventDefault();
+    const addAnotherUser = () => {
         dispatch({ type: "ADD_STUDENT", payload: { firstName, lastName } });
         firstNameTarget.value = "";
         lastNameTarget.value = "";
-        dispatch({type: "HIDE_MODAL"});
-        history.push("/students");
-        return;
+    }
+
+    const submitForm = (event) => {
+        event.preventDefault();
+        /* dispatch({ type: "ADD_STUDENT", payload: { firstName, lastName } });
+        firstNameTarget.value = "";
+        lastNameTarget.value = ""; */
+        if(!anotherUser) {
+            dispatch({ type: "ADD_STUDENT", payload: { firstName, lastName, anotherUser: true } });
+            firstNameTarget.value = "";
+            lastNameTarget.value = "";
+        } else {
+            dispatch({type: "HIDE_MODAL"});
+            history.push("/students");
+        }
     };
 
     return(
         <Form onSubmit={submitForm}>
             <Form.Group controlId="formBasicEmail">
                 <Form.Label>First Name</Form.Label>
-                <Form.Control type="input" placeholder="Enter first name" onChange={getFirstname} required />
+                <Form.Control type="input" placeholder="Enter first name" onChange={getFirstname}  />
                 <Form.Label>Last Name</Form.Label>
-                <Form.Control type="input" placeholder="Enter last name" onChange={getLastname} required />
+                <Form.Control type="input" placeholder="Enter last name" onChange={getLastname}  />
             </Form.Group>
             <Button variant="primary" type="submit"  >
-                Submit
+                {!anotherUser ? 'Add' : 'Finish'}
             </Button>
+            {!anotherUser ? null : 
+            <Button variant="secondary" onClick={addAnotherUser}>
+                Add another student
+            </Button> }
         </Form>
     ) 
 }

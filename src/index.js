@@ -11,6 +11,9 @@ import ModalDialog from './components/ModalDialog';
 const store = createStore(AttendanceApp);
 
 
+
+
+
 ReactDOM.render(
   <Provider store={store}>
     <Router>
