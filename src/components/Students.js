@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Datepicker from './Datepicker';
@@ -7,9 +7,7 @@ import firebase from "../firebaseConfig";
 
 let db = firebase.firestore();
 
-let studentsAbsent;
-let studentsPresent;
-let totalStudents;
+
 
 function DisplayStudents() {
 //let location = useLocation();
@@ -17,7 +15,9 @@ const dispatch = useDispatch();
 const students = useSelector(state => state.students);
 const states = useSelector(state => state);
 let checkboxArr;
-
+let [studentsAbsent, setAbsent] = useState(0);
+let [studentsPresent, setPresent] = useState(0);
+let [totalStudents, setTotal] = useState(0);
 let today = document.getElementById("table-datepicker");
 //let params = new URLSearchParams(location.search.substring(1));
 //let selectedTable = params.get("table");
@@ -113,19 +113,16 @@ query.get()
             }
         }
     });
-    statistics(total, absent, present);
+    setTotal(total);
+    setAbsent(absent);
+    setPresent(present);
 })
 .catch(function(error) {
     console.log("Error getting documents: ", error);
 });
 }
 
-function statistics(total, absent, present) {
-    totalStudents = total;
-    studentsPresent = present;
-    studentsAbsent = absent;
-    console.log(totalStudents);
-}
+
 
     return (
         <div>
