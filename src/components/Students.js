@@ -7,15 +7,20 @@ import firebase from "../firebaseConfig";
 
 let db = firebase.firestore();
 
+let studentsAbsent;
+let studentsPresent;
+let totalStudents;
+
 function DisplayStudents() {
-// let location = useLocation();
+//let location = useLocation();
 const dispatch = useDispatch();
 const students = useSelector(state => state.students);
 const states = useSelector(state => state);
 let checkboxArr;
+
 let today = document.getElementById("table-datepicker");
-// let params = new URLSearchParams(location.search.substring(1));
-// let selectedTable = params.get("table");
+//let params = new URLSearchParams(location.search.substring(1));
+//let selectedTable = params.get("table");
 
 /* let foundTable = states.tables.filter((table) => {
     return table.tableName === selectedTable;
@@ -85,6 +90,43 @@ function submitTable() {
     })
 }
 
+function getTotalStudents() {
+    // Create a reference to the cities collection
+var citiesRef = db.collection("StudentsTables");
+
+// Create a query against the collection.
+var query = citiesRef.where("date", "==", today.value);
+
+query.get()
+.then(function(querySnapshot) {
+    var absent = 0;
+    var present = 0;
+    var total;
+    querySnapshot.forEach(function(doc) {
+        // doc.data() is never undefined for query doc snapshots
+        total = (doc.data().table.length);
+        for(var i = 0; i < doc.data().table.length; i ++) {
+            if(doc.data().table[i].absent) {
+                absent++;
+            } else if(doc.data().table[i].present) {
+                present++;
+            }
+        }
+    });
+    statistics(total, absent, present);
+})
+.catch(function(error) {
+    console.log("Error getting documents: ", error);
+});
+}
+
+function statistics(total, absent, present) {
+    totalStudents = total;
+    studentsPresent = present;
+    studentsAbsent = absent;
+    console.log(totalStudents);
+}
+
     return (
         <div>
             <Link to="/">Home</Link>
@@ -99,7 +141,16 @@ function submitTable() {
                     {studentsList}
                 </tbody>
             </Table>
-            {studentsList.length ? <button id="table-submit" onClick={submitTable}>Submit</button> : null}
+            {studentsList.length ? 
+            <>
+            <div>
+                <button id="table-submit" onClick={submitTable}>Submit</button>
+                <button onClick={getTotalStudents}>Total</button>
+            </div>
+            <div>Total students: {totalStudents} Present: {studentsPresent} Absent: {studentsAbsent}</div>
+            </> 
+            : null}
+           
         </div>
     );
 }

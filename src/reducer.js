@@ -86,6 +86,16 @@ function AttendanceApp(state = initialState, action) {
                 // copyState.students = [];
                 copyState.tables.push({name: action.payload.name, docRef: action.payload.docRef});
                 return copyState;
+            case "INITIALIZE_APP":
+                const updateState = {
+                    ...state,
+                    tables: [...state.tables],
+                    students: [...state.students],
+                    tableLength: action.payload.length
+                }
+                updateState.tables = action.payload;
+                // updateState.students = action.payload.students;
+                return updateState;
         default:
             return state;
     }
