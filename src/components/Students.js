@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useParams, useLocation, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Datepicker from './Datepicker';
 import Table from 'react-bootstrap/Table';
 import firebase from "../firebaseConfig";
@@ -8,15 +8,14 @@ import firebase from "../firebaseConfig";
 let db = firebase.firestore();
 
 function DisplayStudents() {
-let location = useLocation();
-let history = useHistory();
+// let location = useLocation();
 const dispatch = useDispatch();
 const students = useSelector(state => state.students);
 const states = useSelector(state => state);
 let checkboxArr;
 let today = document.getElementById("table-datepicker");
-let params = new URLSearchParams(location.search.substring(1));
-let selectedTable = params.get("table");
+// let params = new URLSearchParams(location.search.substring(1));
+// let selectedTable = params.get("table");
 
 /* let foundTable = states.tables.filter((table) => {
     return table.tableName === selectedTable;

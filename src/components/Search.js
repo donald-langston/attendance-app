@@ -4,9 +4,6 @@ import { useHistory } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import firebase from "../firebaseConfig";
 
-
-
-
 let db = firebase.firestore();
 
 function Search(props) {

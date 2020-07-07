@@ -1,15 +1,12 @@
 import React from 'react';
 import { 
-  Link,
   Switch,
   Route
 } from 'react-router-dom';
-import ReactDOM from 'react-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import InputGroup from 'react-bootstrap/InputGroup';
-import DisplayForm from './Forms';
+import DisplayForm from './Forms'
 import DisplayStudents from './Students';
 import Home from './Home';
 import StudentsTable from './StudentsTable';
@@ -23,8 +20,6 @@ function ModalDialog() {
   const handleClose = () => dispatch({type: "HIDE_MODAL"});
   const handleShow = () => dispatch({type: "SHOW_MODAL"});
   const show = useSelector(state => state.show);
-  const firstName = useSelector(state => state.student.firstName);
-  const lastName = useSelector(state => state.student.lastName);
 
   return (
     <>
