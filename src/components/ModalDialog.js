@@ -12,6 +12,9 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import DisplayForm from './Forms';
 import DisplayStudents from './Students';
 import Home from './Home';
+import StudentsTable from './StudentsTable';
+import Search from './Search';
+import DisplayTables from './DisplayTables';
 
 
 function ModalDialog() {
@@ -28,12 +31,22 @@ function ModalDialog() {
     <Switch>
       <Route exact path="/">
         <Home />
-        <Button variant="primary" onClick={handleShow}>
-          Add Students
+        <Button style={{marginRight: 10}} variant="primary" onClick={handleShow}>
+          Create Students Table
         </Button>
+        <Search />
       </Route>
       <Route path="/students">
           <DisplayStudents />
+      </Route>
+      <Route path="/students/:table">
+        <DisplayStudents />
+      </Route>
+      <Route path="/studentstable">
+        <StudentsTable />
+      </Route>
+      <Route path="/displaytables/:tables">
+        <DisplayTables />
       </Route>
     </Switch>
 

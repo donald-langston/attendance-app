@@ -1,6 +1,7 @@
 import generateId from './generateId';
 const initialState = {
     students: [],
+    tables: [],
     student: {
         firstName: "",
         lastName: "",
@@ -10,8 +11,8 @@ const initialState = {
     },
     show: false,
     date: null,
-    anotherUser: false
-    
+    anotherUser: false,
+    tableLength: 0
 }
 
 function AttendanceApp(state = initialState, action) {
@@ -75,6 +76,16 @@ function AttendanceApp(state = initialState, action) {
                 ...state,
                 docRef: action.payload
             }
+            case "ADD_TABLE":
+                const copyState = {
+                    ...state,
+                    students: [...state.students],
+                    tables: [...state.tables],
+                    tableLength: state.tableLength + 1
+                }
+                // copyState.students = [];
+                copyState.tables.push({name: action.payload.name, docRef: action.payload.docRef});
+                return copyState;
         default:
             return state;
     }

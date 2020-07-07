@@ -7,10 +7,12 @@ function Home() {
     return ( 
         <Jumbotron id="home-jumbotron" fluid>
             <Container>
-                <h1>Attendance App</h1>
-                <p>
-                Keep an accurate count of your students. Who was present and who wasn't.
-                </p>
+                <div id="headerDiv">
+                    <h1>Attendance App</h1>
+                    <p>
+                    Keep an accurate count of your students. Who was present and who wasn't.
+                    </p>
+                </div>
             </Container>
         </Jumbotron>
     )

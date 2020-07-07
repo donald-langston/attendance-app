@@ -13,7 +13,6 @@ const store = createStore(AttendanceApp);
 
 
 
-
 ReactDOM.render(
   <Provider store={store}>
     <Router>

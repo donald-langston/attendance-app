@@ -1,17 +1,32 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useParams, useLocation, useHistory } from 'react-router-dom';
 import Datepicker from './Datepicker';
 import Table from 'react-bootstrap/Table';
+import firebase from "../firebaseConfig";
 
+let db = firebase.firestore();
 
 function DisplayStudents() {
+let location = useLocation();
+let history = useHistory();
+const dispatch = useDispatch();
 const students = useSelector(state => state.students);
 const states = useSelector(state => state);
-console.log(students);
-console.log(states);
-const dispatch = useDispatch();
 let checkboxArr;
+let today = document.getElementById("table-datepicker");
+let params = new URLSearchParams(location.search.substring(1));
+let selectedTable = params.get("table");
+
+/* let foundTable = states.tables.filter((table) => {
+    return table.tableName === selectedTable;
+})
+
+let students = foundTable[0].students; */
+
+/* if(table) {
+    dispatch({type: "POPULATE_STUDENT_ARRAY", payload: table});
+} */
 const checkHandler = (name, id) => {
     //checkboxes have same name which are stored in checkboxArr
     checkboxArr = document.getElementsByName(name);
@@ -19,7 +34,7 @@ const checkHandler = (name, id) => {
     if(checkboxArr[0].checked) {
         checkboxArr[1].disabled = true;
         dispatch({type: "UPDATE_ATTENDANCE", payload: {attendance: "present", id}});
-        console.log(students);
+        
     }
     //if secondbox is checked disable first
     else if(checkboxArr[1].checked) {
@@ -58,6 +73,19 @@ let studentsList = students.map((student, index) => {
         </tr>
         )
     });
+
+function submitTable() {
+    let docRef = db.collection("StudentsTables").doc();
+    console.log(docRef.id);
+    docRef.set({
+        date: today.value,
+        table: states.students
+    })
+    .then(() => {
+        dispatch({type: "ADD_DOC_REF", payload: docRef.id})
+    })
+}
+
     return (
         <div>
             <Link to="/">Home</Link>
@@ -72,6 +100,7 @@ let studentsList = students.map((student, index) => {
                     {studentsList}
                 </tbody>
             </Table>
+            {studentsList.length ? <button id="table-submit" onClick={submitTable}>Submit</button> : null}
         </div>
     );
 }
