@@ -46,10 +46,10 @@ function AttendanceApp(state = initialState, action) {
                 anotherUser: false
             }
         case "UPDATE_ATTENDANCE":
-            let index = state.students.findIndex(student => student.id === action.payload.id);
+            let index = action.payload.students.findIndex(student => student.id === action.payload.id);
             const newState = {
                 ...state,
-                students: [...state.students]
+                students: action.payload.students
             }
                    
             if(index !== -1) { 
@@ -65,7 +65,7 @@ function AttendanceApp(state = initialState, action) {
                     return newState;
                 }
             }
-            break;
+            return state;
         case "CHANGE_DATE":
             return {
                 ...state,
@@ -80,10 +80,9 @@ function AttendanceApp(state = initialState, action) {
                 const copyState = {
                     ...state,
                     students: [...state.students],
-                    tables: [...state.tables],
-                    tableLength: state.tableLength + 1
+                    tables: [...state.tables]
                 }
-                // copyState.students = [];
+                copyState.students = [];
                 copyState.tables.push({name: action.payload.name, docRef: action.payload.docRef});
                 return copyState;
             case "INITIALIZE_APP":
@@ -94,8 +93,27 @@ function AttendanceApp(state = initialState, action) {
                     tableLength: action.payload.length
                 }
                 updateState.tables = action.payload;
-                // updateState.students = action.payload.students;
+                //updateState.students = action.payload.students;
                 return updateState;
+            case "POPULATE_STUDENT_ARRAY":
+                const newCopyState = {
+                    ...state,
+                    students: [...state.students],
+                    tables: [...state.tables]
+                }
+                newCopyState.students = action.payload;
+                return newCopyState;
+            case "UPDATE_TABLE_LENGTH":
+                return {
+                    ...state,
+                    tableLength: state.tableLength + 1
+                }
+            case "CLEAR_STUDENTS_ARRAY":
+                const emptyArray = [];
+                return {
+                    ...state,
+                    students: emptyArray
+                }
         default:
             return state;
     }

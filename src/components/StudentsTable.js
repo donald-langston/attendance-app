@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import Table from 'react-bootstrap/Table';
@@ -8,7 +8,11 @@ let db = firebase.firestore();
 
 function StudentsTable() {
 const students = useSelector(state => state.students);
-const tablesLength = useSelector(state => state.tableLength);
+let [tablesLength, setTablesLength] = useState(0);
+// set tables length to amount of tables stored in database
+db.collection("Tables").get().then(function(querySnapshot) {
+    setTablesLength(querySnapshot.docs.length);
+});
 const dispatch = useDispatch();
 let history = useHistory();
 
@@ -43,14 +47,15 @@ let studentsList = students.map((student, index) => {
             table: students
         })
         .then(() => {
-            console.log(studentsList);
             dispatch({type: "ADD_TABLE", payload: {name: "Table" + (tablesLength + 1), docRef: docRef.id}});
+            dispatch({type: "UPDATE_TABLE_LENGTH"});
+            dispatch({type: "CLEAR_STUDENTS_ARRAY"});
             history.push("/");
         })
     }
 
     return(
-        <>
+        <div>
         <Link to="/students">Students</Link>
         <Table striped bordered hover>
                 <thead>
@@ -62,7 +67,7 @@ let studentsList = students.map((student, index) => {
             </Table>
             {studentsList.length ? <button onClick={saveTable}>Save Student Table</button> : null}
             
-        </>
+        </div>
     )
 }
 

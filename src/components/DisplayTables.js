@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { useParams, Link } from 'react-router-dom';
 
 function DisplayTables() {
@@ -8,10 +9,10 @@ function DisplayTables() {
         return <div key={index}><Link to={`/students?table=${table}`}>{table}</Link></div>;
     })
     return(
-        <>
+        <div>
         <h1>Display Tables</h1>
         {tablesDisplay}
-        </>
+        </div>
     )
 }
 

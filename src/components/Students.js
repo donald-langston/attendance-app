@@ -1,6 +1,6 @@
 import React, { useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Datepicker from './Datepicker';
 import Table from 'react-bootstrap/Table';
 import firebase from "../firebaseConfig";
@@ -10,51 +10,50 @@ let db = firebase.firestore();
 
 
 function DisplayStudents() {
-//let location = useLocation();
+let location = useLocation();
 const dispatch = useDispatch();
-const students = useSelector(state => state.students);
+// const students = useSelector(state => state.students);
 const states = useSelector(state => state);
 let checkboxArr;
 let [studentsAbsent, setAbsent] = useState(0);
 let [studentsPresent, setPresent] = useState(0);
 let [totalStudents, setTotal] = useState(0);
+// let [students, setStudents] = useState([]);
 let today = document.getElementById("table-datepicker");
-//let params = new URLSearchParams(location.search.substring(1));
-//let selectedTable = params.get("table");
 
-/* let foundTable = states.tables.filter((table) => {
+let params = new URLSearchParams(location.search.substring(1));
+let selectedTable = params.get("table");
+let foundTable = states.tables.filter((table) => {
     return table.tableName === selectedTable;
-})
+});
 
-let students = foundTable[0].students; */
+// setStudents(foundTable[0].students);
+let students = foundTable[0].students;
 
-/* if(table) {
-    dispatch({type: "POPULATE_STUDENT_ARRAY", payload: table});
-} */
+    // dispatch({type: "POPULATE_STUDENT_ARRAY", payload: students});
+
 const checkHandler = (name, id) => {
     //checkboxes have same name which are stored in checkboxArr
     checkboxArr = document.getElementsByName(name);
     //if firstbox is checked disable second
     if(checkboxArr[0].checked) {
         checkboxArr[1].disabled = true;
-        dispatch({type: "UPDATE_ATTENDANCE", payload: {attendance: "present", id}});
+        dispatch({type: "UPDATE_ATTENDANCE", payload: {attendance: "present", students, id}});
         
     }
     //if secondbox is checked disable first
     else if(checkboxArr[1].checked) {
         checkboxArr[0].disabled = true;
-        dispatch({type: "UPDATE_ATTENDANCE", payload: {attendance: "absent", id}});
+        dispatch({type: "UPDATE_ATTENDANCE", payload: {attendance: "absent", students, id}});
         
     }
     //if either checkbox is unchecked reset both
     else {
         checkboxArr[0].disabled = false;
         checkboxArr[1].disabled = false;
-        dispatch({type: "UPDATE_ATTENDANCE", payload: {id}});
+        dispatch({type: "UPDATE_ATTENDANCE", payload: {students, id}});
     }
 }
-
-
 
 let studentsHeader = <tr>
                         <th>#</th>
@@ -80,10 +79,9 @@ let studentsList = students.map((student, index) => {
 
 function submitTable() {
     let docRef = db.collection("StudentsTables").doc();
-    console.log(docRef.id);
     docRef.set({
         date: today.value,
-        table: states.students
+        table: foundTable
     })
     .then(() => {
         dispatch({type: "ADD_DOC_REF", payload: docRef.id})
@@ -92,10 +90,10 @@ function submitTable() {
 
 function getTotalStudents() {
     // Create a reference to the cities collection
-var citiesRef = db.collection("StudentsTables");
+var studentsRef = db.collection("StudentsTables");
 
 // Create a query against the collection.
-var query = citiesRef.where("date", "==", today.value);
+var query = studentsRef.where("date", "==", today.value);
 
 query.get()
 .then(function(querySnapshot) {
@@ -103,13 +101,15 @@ query.get()
     var present = 0;
     var total;
     querySnapshot.forEach(function(doc) {
-        // doc.data() is never undefined for query doc snapshots
-        total = (doc.data().table.length);
-        for(var i = 0; i < doc.data().table.length; i ++) {
-            if(doc.data().table[i].absent) {
-                absent++;
-            } else if(doc.data().table[i].present) {
-                present++;
+        if(doc.data().table[0].tableName === selectedTable) {
+            // doc.data() is never undefined for query doc snapshots
+            total = (doc.data().table[0].students.length);
+            for(var i = 0; i < doc.data().table[0].students.length; i ++) {
+                if(doc.data().table[0].students[i].absent) {
+                    absent++;
+                } else if(doc.data().table[0].students[i].present) {
+                    present++;
+                }
             }
         }
     });
@@ -121,7 +121,6 @@ query.get()
     console.log("Error getting documents: ", error);
 });
 }
-
 
 
     return (
@@ -139,13 +138,13 @@ query.get()
                 </tbody>
             </Table>
             {studentsList.length ? 
-            <>
             <div>
-                <button id="table-submit" onClick={submitTable}>Submit</button>
-                <button onClick={getTotalStudents}>Total</button>
-            </div>
-            <div>Total students: {totalStudents} Present: {studentsPresent} Absent: {studentsAbsent}</div>
-            </> 
+                <div>
+                    <button id="table-submit" onClick={submitTable}>Submit</button>
+                    <button onClick={getTotalStudents}>Total</button>
+                </div>
+                <div>Total students: {totalStudents} Present: {studentsPresent} Absent: {studentsAbsent}</div>
+            </div> 
             : null}
            
         </div>

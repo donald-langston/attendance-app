@@ -10,18 +10,17 @@ function Search(props) {
     const state = useSelector(state => state);
     const dispatch = useDispatch();
     let history = useHistory();
-    console.log(state);
+    
     function searchTables() {
         let tableNames = [];
         let data = [];
         db.collection("Tables").get().then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
-                // doc.data() is never undefined for query doc snapshots
-                console.log(doc.id, " => ", doc.data());
                 tableNames.push(doc.data().name);
                 data.push({tableName: doc.data().name, docRef: doc.id, students: doc.data().table});
             });
-            console.log(data);
+            // sort table names in order so they are displayed in order
+            tableNames.sort();
             dispatch({type: "INITIALIZE_APP", payload: data})
             history.push("/displaytables/" + tableNames);
         });

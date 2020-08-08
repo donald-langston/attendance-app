@@ -8,7 +8,7 @@ import './index.css';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ModalDialog from './components/ModalDialog';
-const store = createStore(AttendanceApp);
+const store = createStore(AttendanceApp, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 
 

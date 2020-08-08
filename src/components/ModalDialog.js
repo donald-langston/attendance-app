@@ -22,7 +22,7 @@ function ModalDialog() {
   const show = useSelector(state => state.show);
 
   return (
-    <>
+    <div>
     <Switch>
       <Route exact path="/">
         <Home />
@@ -53,7 +53,7 @@ function ModalDialog() {
         </Modal.Header>
           <Modal.Body><DisplayForm /></Modal.Body>
       </Modal>
-    </>
+    </div>
   );
 }
 
