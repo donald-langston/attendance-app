@@ -10,6 +10,7 @@ function DisplayTables() {
     })
     return(
         <div>
+        <Link to="/">Home</Link>
         <h1>Display Tables</h1>
         {tablesDisplay}
         </div>

@@ -1,4 +1,4 @@
-import generateId from './generateId';
+import generateId from '../generateId';
 const initialState = {
     students: [],
     tables: [],
@@ -76,44 +76,44 @@ function AttendanceApp(state = initialState, action) {
                 ...state,
                 docRef: action.payload
             }
-            case "ADD_TABLE":
-                const copyState = {
-                    ...state,
-                    students: [...state.students],
-                    tables: [...state.tables]
-                }
-                copyState.students = [];
-                copyState.tables.push({name: action.payload.name, docRef: action.payload.docRef});
-                return copyState;
-            case "INITIALIZE_APP":
-                const updateState = {
-                    ...state,
-                    tables: [...state.tables],
-                    students: [...state.students],
-                    tableLength: action.payload.length
-                }
-                updateState.tables = action.payload;
-                //updateState.students = action.payload.students;
-                return updateState;
-            case "POPULATE_STUDENT_ARRAY":
-                const newCopyState = {
-                    ...state,
-                    students: [...state.students],
-                    tables: [...state.tables]
-                }
-                newCopyState.students = action.payload;
-                return newCopyState;
-            case "UPDATE_TABLE_LENGTH":
-                return {
-                    ...state,
-                    tableLength: state.tableLength + 1
-                }
-            case "CLEAR_STUDENTS_ARRAY":
-                const emptyArray = [];
-                return {
-                    ...state,
-                    students: emptyArray
-                }
+        case "ADD_TABLE":
+            const copyState = {
+                ...state,
+                students: [...state.students],
+                tables: [...state.tables]
+            }
+            copyState.students = [];
+            copyState.tables.push({name: action.payload.name, docRef: action.payload.docRef});
+            return copyState;
+        case "INITIALIZE_APP":
+            const updateState = {
+                ...state,
+                tables: [...state.tables],
+                students: [...state.students],
+                tableLength: action.payload.length
+            }
+            updateState.tables = action.payload;
+            //updateState.students = action.payload.students;
+            return updateState;
+        case "POPULATE_STUDENT_ARRAY":
+            const newCopyState = {
+                ...state,
+                students: [...state.students],
+                tables: [...state.tables]
+            }
+            newCopyState.students = action.payload;
+            return newCopyState;
+        case "UPDATE_TABLE_LENGTH":
+            return {
+                ...state,
+                tableLength: state.tableLength + 1
+            }
+        case "CLEAR_STUDENTS_ARRAY":
+            const emptyArray = [];
+            return {
+                ...state,
+                students: emptyArray
+            }
         default:
             return state;
     }

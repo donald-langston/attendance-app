@@ -27,7 +27,9 @@ function Search(props) {
     }
     
     return(
-        <Button onClick={searchTables}>Search for Tables</Button>
+        <div>
+            <Button onClick={searchTables}>Search for Tables</Button>
+        </div>
     )
 }
 

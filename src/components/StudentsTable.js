@@ -8,6 +8,7 @@ let db = firebase.firestore();
 
 function StudentsTable() {
 const students = useSelector(state => state.students);
+const [tableName, setTableName] = useState('');
 let [tablesLength, setTablesLength] = useState(0);
 // set tables length to amount of tables stored in database
 db.collection("Tables").get().then(function(querySnapshot) {
@@ -16,20 +17,20 @@ db.collection("Tables").get().then(function(querySnapshot) {
 const dispatch = useDispatch();
 let history = useHistory();
 
-let studentsHeader = 
+let studentsHeader =     
     <tr>
         <th>#</th>
         <th>ID</th>
         <th>First Name</th>
         <th>Last Name</th>
-  </tr>;
+    </tr>;
                     
 let studentsList = students.map((student, index) => {
     /* delete absent and present key from object when creating table
     and storing to database
     delete student.present;
     delete student.absent; */
-    return ( 
+    return (
         <tr key={student.id}>
             <td>{index + 1}</td>
             <td>{student.id}</td>
@@ -43,7 +44,7 @@ let studentsList = students.map((student, index) => {
         //save to database with name Table-tablesLength + 1
         let docRef = db.collection("Tables").doc();
         docRef.set({
-            name: "Table" + (tablesLength + 1),
+            name: tableName || "Table" + (tablesLength + 1),
             table: students
         })
         .then(() => {
@@ -56,8 +57,11 @@ let studentsList = students.map((student, index) => {
 
     return(
         <div>
-        <Link to="/students">Students</Link>
-        <Table striped bordered hover>
+            <Link to="/students">Students</Link>
+            <div>
+                <input placeholder={"Enter table name"} onChange={(e) => setTableName(e.target.value)} />
+            </div>
+            <Table striped bordered hover>
                 <thead>
                     {studentsHeader}
                 </thead>
@@ -66,7 +70,6 @@ let studentsList = students.map((student, index) => {
                 </tbody>
             </Table>
             {studentsList.length ? <button onClick={saveTable}>Save Student Table</button> : null}
-            
         </div>
     )
 }
