@@ -1,6 +1,7 @@
 import React, { useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import NavBar from './NavBar';
 import Datepicker from './Datepicker';
 import Table from 'react-bootstrap/Table';
 import firebase from "../firebaseConfig";
@@ -125,7 +126,7 @@ query.get()
 
     return (
         <div>
-            <Link to="/">Home</Link>
+            <NavBar />
             <div>
                 <Datepicker />
             </div>

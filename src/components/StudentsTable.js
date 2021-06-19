@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import AppNavBar from './NavBar';
 import Table from 'react-bootstrap/Table';
 import firebase from "../firebaseConfig";
 
@@ -57,7 +58,7 @@ let studentsList = students.map((student, index) => {
 
     return(
         <div>
-            <Link to="/students">Students</Link>
+            <AppNavBar />
             <div>
                 <input placeholder={"Enter table name"} onChange={(e) => setTableName(e.target.value)} />
             </div>
